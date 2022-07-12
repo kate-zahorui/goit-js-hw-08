@@ -3,20 +3,22 @@ import ls from './local-storage';
 
 const feedbackForm = document.querySelector('.feedback-form');
 
-let userData = ls.load('feedback-form-state');
-
 const initForm = function () {
+  let userData = ls.load('feedback-form-state');
+
   if (userData) {
     const { email, message } = feedbackForm.elements;
     email.value = userData.email ? userData.email : '';
     message.value = userData.message ? userData.message : '';
-  } else {
-    userData = {};
   }
 };
 initForm();
 
 const onFormInput = function (event) {
+  let userData = ls.load('feedback-form-state');
+  if (!userData) {
+    userData = {};
+  }
   const { name, value } = event.target;
   userData[name] = value;
   ls.save('feedback-form-state', userData);
@@ -28,7 +30,7 @@ const onFormSubmit = function (event) {
   if (email.value === '' || message.value === '') {
     return alert('Заповніть будь-ласка всі поля форми!');
   }
-
+  const userData = {};
   userData.email = email.value;
   userData.message = message.value;
   console.log(userData);
